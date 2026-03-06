@@ -3,427 +3,644 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lovable → WordPress Converter Tool</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>URL → Elementor — AI Design Replicator</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #04060d; --surface: #080d18; --surface2: #0c1220;
-    --border: #141e2e; --border2: #1e2d42;
-    --accent: #00e5ff; --accent2: #7b61ff;
-    --text: #e8edf5; --muted: #5a7085; --muted2: #8ba3bc;
-    --success: #00e5a0; --glow: rgba(0,229,255,0.10);
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; }
-  body { padding: 20px; overflow-x: hidden; }
-  ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: var(--bg); } ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+:root{--bg:#04060d;--s1:#080e1a;--s2:#0c1422;--border:#131d2e;--border2:#1a2840;--a:#00e5ff;--a2:#7b61ff;--a3:#ff4ecd;--text:#e4eaf4;--muted:#4e6480;--muted2:#7a9ab8;--ok:#00e5a0;--err:#ff4e6a}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.app{max-width:1100px;margin:0 auto;padding:28px 20px}
 
-  /* ── TOP BAR ── */
-  .topbar {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
-  }
-  .tool-logo { display: flex; align-items: center; gap: 8px; }
-  .tool-logo-icon { width: 30px; height: 30px; border-radius: 7px; background: linear-gradient(135deg,var(--accent),var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 15px; }
-  .tool-logo span { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; background: linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .tool-badge { padding: 3px 10px; background: var(--glow); border: 1px solid rgba(0,229,255,0.2); border-radius: 20px; font-size: 11px; color: var(--accent); font-weight: 600; }
+/* HEADER */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding-bottom:22px;border-bottom:1px solid var(--border);margin-bottom:28px;flex-wrap:wrap;gap:14px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-ico{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,var(--a),var(--a2));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 0 20px rgba(0,229,255,0.2)}
+.logo h1{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(90deg,var(--a),var(--a2),var(--a3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2}
+.logo p{font-size:12px;color:var(--muted2);margin-top:2px}
+.badges{display:flex;gap:7px;flex-wrap:wrap}
+.badge{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;border:1px solid}
+.ba{background:rgba(0,229,255,0.07);border-color:rgba(0,229,255,0.3);color:var(--a)}
+.bb{background:rgba(123,97,255,0.07);border-color:rgba(123,97,255,0.3);color:#a78bfa}
+.bc{background:rgba(0,229,160,0.07);border-color:rgba(0,229,160,0.3);color:var(--ok)}
 
-  /* ── MAIN GRID ── */
-  #tool { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  @media(max-width:780px) { #tool { grid-template-columns: 1fr; } }
+/* HOW IT WORKS */
+.how{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.how-card{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center}
+.how-n{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,var(--a),var(--a2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.how-i{font-size:20px;margin:4px 0}
+.how-card h4{font-size:12px;font-weight:700;margin-bottom:3px}
+.how-card p{font-size:11px;color:var(--muted2);line-height:1.55}
 
-  /* ── LABELS ── */
-  .panel-label { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: baseline; }
-  .panel-label span { font-weight: 400; font-family: 'JetBrains Mono', monospace; color: var(--muted); font-size: 10px; }
+/* MAIN CARD */
+.card{background:var(--s1);border:1px solid var(--border2);border-radius:16px;padding:26px;margin-bottom:18px}
+.card-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;margin-bottom:6px}
+.card-sub{font-size:13px;color:var(--muted2);margin-bottom:22px;line-height:1.65}
 
-  /* ── INPUTS ── */
-  textarea, input[type=text] { width: 100%; background: #020408; border: 1px solid var(--border); border-radius: 8px; color: #7dd3fc; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; line-height: 1.7; padding: 11px 13px; outline: none; resize: vertical; transition: border-color 0.2s; }
-  textarea:focus, input[type=text]:focus { border-color: rgba(0,229,255,0.4); }
-  input[type=text] { color: var(--text); font-family: 'Outfit', sans-serif; font-size: 14px; resize: none; }
+/* URL INPUT */
+.url-wrap{display:flex;gap:10px;margin-bottom:12px;align-items:stretch}
+.url-in{flex:1;background:#020509;border:1px solid var(--border2);border-radius:10px;padding:13px 16px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:14px;outline:none;transition:all 0.2s;min-width:0}
+.url-in:focus{border-color:rgba(0,229,255,0.45);box-shadow:0 0 0 3px rgba(0,229,255,0.07)}
+.url-in::placeholder{color:var(--muted)}
 
-  /* ── COMPONENT BLOCKS ── */
-  .comp-block { background: #030609; border: 1px solid var(--border); border-radius: 8px; padding: 11px; margin-bottom: 9px; }
-  .comp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
-  .comp-name-label { font-size: 11px; color: var(--accent); font-weight: 600; }
-  .comp-remove { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 18px; line-height: 1; padding: 0 4px; }
-  .comp-name-input { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 5px; color: var(--text); font-family: 'Outfit', sans-serif; font-size: 12px; padding: 6px 10px; outline: none; margin-bottom: 6px; }
-  .comp-code-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 5px; color: #7dd3fc; font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.65; padding: 8px 10px; outline: none; resize: vertical; }
+/* EXAMPLE SITES */
+.examples{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.ex-label{font-size:11px;color:var(--muted);align-self:center}
+.ex-btn{padding:4px 12px;background:var(--s2);border:1px solid var(--border2);border-radius:20px;color:var(--muted2);font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;white-space:nowrap}
+.ex-btn:hover{border-color:var(--a);color:var(--a)}
 
-  /* ── BUTTONS ── */
-  .btn-add-comp { width: 100%; padding: 8px; background: transparent; border: 1px dashed var(--border2); border-radius: 7px; color: var(--muted2); font-size: 12px; cursor: pointer; font-family: 'Outfit', sans-serif; transition: all 0.2s; margin-top: 4px; }
-  .btn-add-comp:hover { border-color: var(--accent); color: var(--accent); background: var(--glow); }
-  .convert-btn { width: 100%; padding: 14px; margin-top: 12px; background: linear-gradient(135deg,rgba(0,229,255,0.1),rgba(123,97,255,0.1)); border: 1px solid var(--accent); border-radius: 10px; color: var(--accent); font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Syne', sans-serif; letter-spacing: 0.02em; transition: all 0.25s; box-shadow: 0 0 20px rgba(0,229,255,0.06); }
-  .convert-btn:hover { background: linear-gradient(135deg,rgba(0,229,255,0.18),rgba(123,97,255,0.18)); box-shadow: 0 0 30px rgba(0,229,255,0.18); }
-  .convert-btn:disabled { opacity: 0.45; cursor: wait; }
-  .example-link { text-align: center; margin-top: 8px; }
-  .example-link button { background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; font-family: 'Outfit', sans-serif; text-decoration: underline; }
+/* SCREENSHOT UPLOAD */
+.or-divider{text-align:center;color:var(--muted);font-size:12px;margin:14px 0;display:flex;align-items:center;gap:10px}
+.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.drop-zone{border:2px dashed var(--border2);border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative}
+.drop-zone:hover,.drop-zone.drag{border-color:var(--a);background:rgba(0,229,255,0.03)}
+.drop-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.drop-i{font-size:32px;margin-bottom:8px}
+.drop-zone h3{font-size:14px;font-weight:700;margin-bottom:4px}
+.drop-zone p{font-size:12px;color:var(--muted2)}
+.img-preview{display:none;position:relative;margin-bottom:14px}
+.img-preview img{width:100%;max-height:260px;object-fit:contain;border-radius:8px;border:1px solid var(--border2)}
+.img-rm{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.8);border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;line-height:1}
 
-  /* ── ERROR ── */
-  .error-msg { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.3); border-radius: 7px; padding: 9px 12px; color: #fca5a5; font-size: 12px; margin-top: 8px; }
+/* GO BUTTON */
+.go{width:100%;padding:15px;background:linear-gradient(135deg,var(--a),var(--a2));border:none;border-radius:11px;color:#04060d;font-weight:800;font-size:15px;cursor:pointer;font-family:'Syne',sans-serif;letter-spacing:0.03em;transition:all 0.25s;box-shadow:0 0 30px rgba(0,229,255,0.18);margin-top:6px}
+.go:hover{transform:translateY(-1px);box-shadow:0 8px 32px rgba(0,229,255,0.32)}
+.go:disabled{opacity:0.4;cursor:wait;transform:none;box-shadow:none}
 
-  /* ── OUTPUT ── */
-  .output-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 360px; border: 2px dashed var(--border); border-radius: 12px; color: var(--muted); text-align: center; gap: 10px; padding: 24px; }
-  .output-empty .big { font-size: 44px; }
-  .output-empty p { font-size: 13px; line-height: 1.7; max-width: 280px; }
-  .output-ready { display: flex; flex-direction: column; gap: 0; }
-  .output-success { padding: 9px 14px; background: linear-gradient(135deg,rgba(0,229,160,0.08),rgba(0,229,160,0.04)); border: 1px solid rgba(0,229,160,0.2); border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center; font-size: 12px; flex-wrap: wrap; gap: 6px; }
-  .output-success .ok { color: var(--success); font-weight: 700; }
-  .output-success .meta { color: var(--muted); font-size: 11px; font-family: 'JetBrains Mono', monospace; }
-  .tabs { display: flex; gap: 1px; background: var(--bg); border-left: 1px solid var(--border); border-right: 1px solid var(--border); padding: 5px 4px 0; flex-wrap: wrap; overflow-x: auto; }
-  .tab-btn { padding: 6px 11px; border: none; cursor: pointer; border-radius: 5px 5px 0 0; font-size: 11px; font-family: 'Outfit', sans-serif; font-weight: 500; white-space: nowrap; transition: all 0.15s; background: transparent; border-bottom: 2px solid transparent; }
-  .tab-btn.active { background: #020408; color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
-  .tab-btn:not(.active) { color: var(--muted); }
-  .tab-btn:not(.active):hover { color: var(--muted2); }
-  .code-out { border: 1px solid var(--border); border-top: none; border-radius: 0 0 10px 10px; overflow: hidden; }
-  .code-out-header { display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: #070d18; border-bottom: 1px solid var(--border); }
-  .code-lang { font-size: 10px; color: var(--muted); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.06em; }
-  .code-btns { display: flex; gap: 5px; align-items: center; }
-  .copy-btn { padding: 3px 10px; background: transparent; border: 1px solid var(--border2); border-radius: 5px; color: var(--muted); font-size: 10px; cursor: pointer; font-family: 'JetBrains Mono', monospace; font-weight: 600; transition: all 0.2s; }
-  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .copy-btn.copied { border-color: var(--success); color: var(--success); background: rgba(0,229,160,0.05); }
-  .dl-btn { padding: 3px 10px; background: rgba(0,229,255,0.08); border: 1px solid rgba(0,229,255,0.3); border-radius: 5px; color: var(--accent); font-size: 10px; cursor: pointer; font-family: 'JetBrains Mono', monospace; font-weight: 700; transition: all 0.2s; }
-  .dl-btn:hover { background: rgba(0,229,255,0.16); }
-  pre.code-body { margin: 0; padding: 12px; max-height: 360px; overflow-y: auto; font-size: 11px; line-height: 1.65; color: #a5d6ff; font-family: 'JetBrains Mono', monospace; background: #020408; scrollbar-width: thin; scrollbar-color: var(--border2) transparent; }
-  .dl-all-btn { width: 100%; padding: 11px; margin-top: 9px; background: linear-gradient(135deg,rgba(0,229,255,0.06),rgba(123,97,255,0.06)); border: 1px solid rgba(0,229,255,0.22); border-radius: 8px; color: var(--accent); font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Syne', sans-serif; letter-spacing: 0.02em; transition: all 0.25s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-  .dl-all-btn:hover { background: linear-gradient(135deg,rgba(0,229,255,0.12),rgba(123,97,255,0.12)); box-shadow: 0 0 20px rgba(0,229,255,0.1); }
+/* STATUS */
+.status{padding:12px 16px;border-radius:9px;font-size:13px;margin-bottom:14px;align-items:center;gap:10px;display:none}
+.status.loading{background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.22);color:var(--a);display:flex}
+.status.success{background:rgba(0,229,160,0.06);border:1px solid rgba(0,229,160,0.22);color:var(--ok);display:flex}
+.status.error{background:rgba(255,78,106,0.06);border:1px solid rgba(255,78,106,0.22);color:var(--err);display:flex}
+.spinner{width:15px;height:15px;border:2px solid rgba(0,229,255,0.2);border-top-color:var(--a);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-  /* ── INSTALL STEPS ── */
-  .install-steps { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-top: 12px; }
-  .install-steps h4 { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
-  .install-step { display: flex; gap: 9px; align-items: flex-start; margin-bottom: 8px; }
-  .install-n { width: 19px; height: 19px; border-radius: 50%; background: linear-gradient(135deg,var(--accent),var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #04060d; flex-shrink: 0; margin-top: 1px; }
-  .install-step-text h5 { font-size: 12px; font-weight: 600; color: var(--text); margin: 0 0 1px; }
-  .install-step-text p { font-size: 11px; color: var(--muted); line-height: 1.5; margin: 0; }
+/* PROGRESS */
+.prog{margin-bottom:18px;display:none}
+.prog-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:10px}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--a),var(--a2),var(--a3));border-radius:2px;transition:width 0.5s ease;width:0%}
+.prog-steps{display:flex;gap:6px;flex-wrap:wrap}
+.ps{padding:3px 10px;border-radius:20px;font-size:11px;background:var(--s2);border:1px solid var(--border);color:var(--muted);transition:all 0.3s}
+.ps.active{background:rgba(0,229,255,0.1);border-color:rgba(0,229,255,0.3);color:var(--a);font-weight:600}
+.ps.done{background:rgba(0,229,160,0.08);border-color:rgba(0,229,160,0.25);color:var(--ok)}
+
+/* SCREENSHOT PREVIEW */
+.ss-preview{display:none;margin-bottom:18px;background:var(--s1);border:1px solid var(--border2);border-radius:12px;overflow:hidden}
+.ss-header{padding:9px 14px;background:var(--s2);border-bottom:1px solid var(--border);font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.ss-preview img{width:100%;max-height:320px;object-fit:contain;display:block;background:#fff}
+
+/* OUTPUT */
+.out-card{display:none;background:var(--s1);border:1px solid var(--border2);border-radius:16px;overflow:hidden}
+.out-hdr{padding:14px 18px;background:var(--s2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.out-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:800}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:3px 10px;border-radius:20px;font-size:11px;font-family:'JetBrains Mono',monospace;background:var(--bg);border:1px solid var(--border2);color:var(--muted2)}
+.chip.g{border-color:rgba(0,229,160,0.3);color:var(--ok);background:rgba(0,229,160,0.05)}
+.tabs{display:flex;overflow-x:auto;background:var(--bg);border-bottom:1px solid var(--border);padding:5px 5px 0;gap:2px}
+.tab{padding:7px 12px;border:none;cursor:pointer;border-radius:5px 5px 0 0;font-size:11px;font-family:'DM Sans',sans-serif;white-space:nowrap;background:transparent;border-bottom:2px solid transparent;color:var(--muted);transition:all 0.15s}
+.tab.active{background:var(--s1);color:var(--a);border-bottom-color:var(--a);font-weight:700}
+.tab:not(.active):hover{color:var(--muted2)}
+.code-bar{display:flex;justify-content:space-between;align-items:center;padding:7px 14px;background:#050b15;border-bottom:1px solid var(--border)}
+.code-lang{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:0.05em}
+.code-btns{display:flex;gap:5px}
+.btn-cp{padding:3px 10px;background:transparent;border:1px solid var(--border2);border-radius:5px;color:var(--muted);font-size:10px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-weight:600;transition:all 0.2s}
+.btn-cp:hover{border-color:var(--a);color:var(--a)}
+.btn-cp.ok{border-color:var(--ok);color:var(--ok);background:rgba(0,229,160,0.05)}
+.btn-dl{padding:3px 10px;background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.3);border-radius:5px;color:var(--a);font-size:10px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-weight:700;transition:all 0.2s}
+.btn-dl:hover{background:rgba(0,229,255,0.15)}
+pre.code{margin:0;padding:14px;max-height:440px;overflow-y:auto;font-size:11px;line-height:1.65;color:#a5d6ff;font-family:'JetBrains Mono',monospace;background:#030609;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+.dl-all{width:100%;padding:13px;background:linear-gradient(135deg,rgba(0,229,255,0.07),rgba(123,97,255,0.07));border:1px solid rgba(0,229,255,0.2);border-top:none;border-radius:0 0 16px 16px;color:var(--a);font-size:14px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;transition:all 0.25s;display:flex;align-items:center;justify-content:center;gap:8px}
+.dl-all:hover{background:linear-gradient(135deg,rgba(0,229,255,0.13),rgba(123,97,255,0.13))}
+
+@media(max-width:650px){.how{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
+<div class="app">
 
-<!-- TOP BAR -->
-<div class="topbar">
-  <div class="tool-logo">
-    <div class="tool-logo-icon">⚡</div>
-    <span>Lovable → WordPress + Elementor</span>
-  </div>
-  <div class="tool-badge">FREE · CLIENT-SIDE · NO UPLOAD</div>
-</div>
-
-<!-- TOOL -->
-<div id="tool">
-
-  <!-- ── LEFT: INPUT ── -->
-  <div id="input-panel">
-    <div style="margin-bottom:12px;">
-      <div class="panel-label">Project Name</div>
-      <input type="text" id="proj-name" value="My Lovable Project" placeholder="My Lovable Project">
-    </div>
-
-    <div style="margin-bottom:12px;">
-      <div class="panel-label">
-        Main Page File <span style="color:#f87171;font-size:10px;">*required</span>
-        <span>Index.tsx / App.tsx</span>
-      </div>
-      <textarea id="main-code" rows="10" placeholder="import Navbar from &quot;@/components/Navbar&quot;;
-import HeroSection from &quot;@/components/HeroSection&quot;;
-import Footer from &quot;@/components/Footer&quot;;
-
-const Index = () => {
-  return (
-    &lt;div className=&quot;min-h-screen&quot;&gt;
-      &lt;Navbar /&gt;
-      &lt;HeroSection /&gt;
-      &lt;Footer /&gt;
-    &lt;/div&gt;
-  );
-};
-export default Index;"></textarea>
-    </div>
-
+<!-- HEADER -->
+<div class="hdr">
+  <div class="logo">
+    <div class="logo-ico">👁️</div>
     <div>
-      <div class="panel-label" style="margin-bottom:5px;">
-        Component Files
-        <span>paste each .tsx separately</span>
-      </div>
-      <div id="comp-list">
-        <div class="comp-block" data-id="1">
-          <div class="comp-header">
-            <span class="comp-name-label">Component 1</span>
-            <button class="comp-remove" onclick="removeComp(1)">×</button>
-          </div>
-          <input class="comp-name-input" placeholder="e.g. HeroSection, Navbar, Footer…">
-          <textarea class="comp-code-input" rows="7" placeholder="const HeroSection = () => {
-  return (
-    &lt;section className=&quot;py-24 bg-gradient-to-br from-slate-900 to-indigo-800&quot;&gt;
-      &lt;h1 className=&quot;text-5xl font-bold text-white&quot;&gt;Your Title&lt;/h1&gt;
-      &lt;p className=&quot;text-xl text-slate-300&quot;&gt;Your description here&lt;/p&gt;
-      &lt;a href=&quot;#&quot; className=&quot;px-8 py-4 bg-indigo-600 text-white rounded-full&quot;&gt;Get Started&lt;/a&gt;
-    &lt;/section&gt;
-  );
-};
-export default HeroSection;"></textarea>
-        </div>
-      </div>
-      <button class="btn-add-comp" onclick="addComp()">+ Add Another Component File</button>
-    </div>
-
-    <div id="error-box" style="display:none;" class="error-msg"></div>
-
-    <button class="convert-btn" id="convert-btn" onclick="doConvert()">
-      ⚡ Convert to WordPress + Elementor
-    </button>
-    <div class="example-link">
-      <button onclick="loadExample()">Load example →</button>
+      <h1>URL → Elementor Replicator</h1>
+      <p>Claude sees any website and rebuilds it as fully editable Elementor JSON</p>
     </div>
   </div>
-
-  <!-- ── RIGHT: OUTPUT ── -->
-  <div id="output-panel">
-    <div class="output-empty" id="empty-state">
-      <div class="big">🧩</div>
-      <p>Paste your <strong>Index.tsx</strong> + component files, click Convert to get your WordPress + Elementor files.</p>
-      <div style="margin-top:10px;display:flex;flex-direction:column;gap:5px;text-align:left;">
-        <div style="font-size:12px;color:var(--muted);">📋 Paste Index.tsx (required)</div>
-        <div style="font-size:12px;color:var(--muted);">🧱 Add component .tsx files</div>
-        <div style="font-size:12px;color:var(--muted);">⚡ Click Convert → get 6 files</div>
-        <div style="font-size:12px;color:var(--muted);">⬇ Download JSON + ZIP</div>
-      </div>
-    </div>
-
-    <div id="result-state" style="display:none;" class="output-ready">
-      <div class="output-success">
-        <span class="ok" id="result-summary">✅ converted</span>
-        <span class="meta" id="result-comps"></span>
-      </div>
-      <div class="tabs" id="output-tabs"></div>
-      <div class="code-out">
-        <div class="code-out-header">
-          <span class="code-lang" id="active-lang">JSON</span>
-          <div class="code-btns">
-            <button class="dl-btn" id="dl-active" onclick="downloadActive()">⬇ DOWNLOAD</button>
-            <button class="copy-btn" id="copy-active" onclick="copyActive()">COPY</button>
-          </div>
-        </div>
-        <pre class="code-body" id="active-code"></pre>
-      </div>
-      <button class="dl-all-btn" onclick="downloadAll()">
-        📦 Download All Files as ZIP
-      </button>
-      <div class="install-steps">
-        <h4>🚀 Quick Install</h4>
-        <div class="install-step"><div class="install-n">1</div><div class="install-step-text"><h5>Upload Theme</h5><p>Zip the theme folder → WP Admin → Appearance → Themes → Add New → Activate</p></div></div>
-        <div class="install-step"><div class="install-n">2</div><div class="install-step-text"><h5>Install Elementor</h5><p>Plugins → Add New → Elementor → Install & Activate (free version works)</p></div></div>
-        <div class="install-step"><div class="install-n">3</div><div class="install-step-text"><h5>Import Template</h5><p>Elementor → My Templates → Import → upload elementor-template.json</p></div></div>
-        <div class="install-step"><div class="install-n">4</div><div class="install-step-text"><h5>Insert & Edit</h5><p>Open any page → Edit with Elementor → Add Template → Insert → Publish</p></div></div>
-      </div>
-    </div>
+  <div class="badges">
+    <span class="badge ba">👁 AI Vision</span>
+    <span class="badge bb">🧩 Elementor Ready</span>
+    <span class="badge bc">📦 WP ZIP</span>
   </div>
 </div>
 
+<!-- HOW IT WORKS -->
+<div class="how">
+  <div class="how-card"><div class="how-n">01</div><div class="how-i">🔗</div><h4>Paste any URL</h4><p>Or upload a screenshot of any design</p></div>
+  <div class="how-card"><div class="how-n">02</div><div class="how-i">📸</div><h4>Auto Screenshot</h4><p>Tool captures the page visually</p></div>
+  <div class="how-card"><div class="how-n">03</div><div class="how-i">👁️</div><h4>Claude Sees Design</h4><p>AI reads every section, color, font, layout</p></div>
+  <div class="how-card"><div class="how-n">04</div><div class="how-i">📦</div><h4>Download & Import</h4><p>Editable Elementor JSON + WP theme ZIP</p></div>
+</div>
+
+<!-- INPUT CARD -->
+<div class="card">
+  <div class="card-title">🔗 Replicate Any Website Design</div>
+  <div class="card-sub">Paste a URL — the tool automatically screenshots it, Claude analyzes the <strong style="color:var(--text)">exact visual design</strong> and rebuilds every section as editable Elementor widgets with the real colors, fonts, layout and content.</div>
+
+  <!-- URL INPUT -->
+  <div class="url-wrap">
+    <input class="url-in" id="url-in" placeholder="https://stripe.com  or  https://linear.app  or any site…" autocomplete="off" spellcheck="false">
+  </div>
+
+  <!-- EXAMPLE SITES -->
+  <div class="examples">
+    <span class="ex-label">Try:</span>
+    <button class="ex-btn" onclick="setUrl('https://stripe.com')">stripe.com</button>
+    <button class="ex-btn" onclick="setUrl('https://linear.app')">linear.app</button>
+    <button class="ex-btn" onclick="setUrl('https://vercel.com')">vercel.com</button>
+    <button class="ex-btn" onclick="setUrl('https://notion.so')">notion.so</button>
+    <button class="ex-btn" onclick="setUrl('https://tailwindcss.com')">tailwindcss.com</button>
+  </div>
+
+  <!-- OR DIVIDER -->
+  <div class="or-divider">or upload a screenshot directly</div>
+
+  <!-- SCREENSHOT UPLOAD -->
+  <div class="drop-zone" id="drop-zone">
+    <input type="file" id="file-in" accept="image/*" onchange="handleFile(event)">
+    <div id="drop-prompt">
+      <div class="drop-i">📸</div>
+      <h3>Drop screenshot here or click to upload</h3>
+      <p>PNG · JPG · WebP — full-page screenshot or design mockup</p>
+    </div>
+  </div>
+  <div class="img-preview" id="img-preview">
+    <img id="preview-img" src="" alt="">
+    <button class="img-rm" onclick="removeImg()">×</button>
+  </div>
+
+  <button class="go" id="go-btn" onclick="startConvert()">👁️ Analyze Design & Generate Elementor JSON</button>
+</div>
+
+<!-- STATUS -->
+<div class="status" id="status"></div>
+
+<!-- PROGRESS -->
+<div class="prog" id="prog">
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+  <div class="prog-steps">
+    <span class="ps" id="ps0">📸 Capturing screenshot</span>
+    <span class="ps" id="ps1">👁 AI analyzing design</span>
+    <span class="ps" id="ps2">🏗 Building sections</span>
+    <span class="ps" id="ps3">🎨 Extracting colors & fonts</span>
+    <span class="ps" id="ps4">🧩 Generating Elementor JSON</span>
+    <span class="ps" id="ps5">📦 Creating WP theme files</span>
+  </div>
+</div>
+
+<!-- SCREENSHOT PREVIEW (shown while processing) -->
+<div class="ss-preview" id="ss-preview">
+  <div class="ss-header" id="ss-header">📸 Screenshot captured — Claude is analyzing this design…</div>
+  <img id="ss-img" src="" alt="Screenshot">
+</div>
+
+<!-- OUTPUT -->
+<div class="out-card" id="out-card">
+  <div class="out-hdr">
+    <span class="out-title" id="out-title">✅ Elementor Template Ready</span>
+    <div class="chips" id="out-chips"></div>
+  </div>
+  <div class="tabs" id="out-tabs"></div>
+  <div class="code-bar">
+    <span class="code-lang" id="active-lang">JSON</span>
+    <div class="code-btns">
+      <button class="btn-dl" onclick="dlActive()">⬇ DOWNLOAD</button>
+      <button class="btn-cp" id="cp-btn" onclick="cpActive()">COPY</button>
+    </div>
+  </div>
+  <pre class="code" id="active-code"></pre>
+  <button class="dl-all" onclick="dlAll()">📦 Download Complete WordPress Package (ZIP)</button>
+</div>
+
+</div><!-- .app -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
-let compIdCounter = 2;
-let outputTabs = [];
-let activeTabKey = "json";
+// ── STATE ────────────────────────────────────────────────────────────────
+let uploadedB64 = null, uploadedType = 'image/png';
+let outTabs = [], activeKey = 'json', slug = 'my-site';
 
-// ── TAILWIND → CSS ─────────────────────────────────────────────────────────
-function tw(classes) {
-  if (!classes) return "";
-  const rules = [];
-  const tokens = classes.split(/\s+/).filter(Boolean);
-  const sizes = {0:"0",1:"4px",2:"8px",3:"12px",4:"16px",5:"20px",6:"24px",7:"28px",8:"32px",9:"36px",10:"40px",11:"44px",12:"48px",14:"56px",16:"64px",20:"80px",24:"96px",28:"112px",32:"128px",36:"144px",40:"160px",48:"192px",56:"224px",64:"256px",72:"288px",80:"320px",96:"384px","px":"1px","0.5":"2px","1.5":"6px","2.5":"10px","3.5":"14px"};
-  const colors = {"slate-50":"#f8fafc","slate-100":"#f1f5f9","slate-200":"#e2e8f0","slate-300":"#cbd5e1","slate-400":"#94a3b8","slate-500":"#64748b","slate-600":"#475569","slate-700":"#334155","slate-800":"#1e293b","slate-900":"#0f172a","gray-50":"#f9fafb","gray-100":"#f3f4f6","gray-200":"#e5e7eb","gray-300":"#d1d5db","gray-400":"#9ca3af","gray-500":"#6b7280","gray-600":"#4b5563","gray-700":"#374151","gray-800":"#1f2937","gray-900":"#111827","red-400":"#f87171","red-500":"#ef4444","red-600":"#dc2626","orange-500":"#f97316","yellow-400":"#facc15","green-400":"#4ade80","green-500":"#22c55e","green-600":"#16a34a","teal-500":"#14b8a6","cyan-400":"#22d3ee","cyan-500":"#06b6d4","sky-400":"#38bdf8","sky-500":"#0ea5e9","sky-600":"#0284c7","blue-50":"#eff6ff","blue-100":"#dbeafe","blue-200":"#bfdbfe","blue-300":"#93c5fd","blue-400":"#60a5fa","blue-500":"#3b82f6","blue-600":"#2563eb","blue-700":"#1d4ed8","blue-800":"#1e40af","blue-900":"#1e3a8a","indigo-50":"#eef2ff","indigo-100":"#e0e7ff","indigo-300":"#a5b4fc","indigo-400":"#818cf8","indigo-500":"#6366f1","indigo-600":"#4f46e5","indigo-700":"#4338ca","indigo-800":"#3730a3","indigo-900":"#312e81","violet-400":"#a78bfa","violet-500":"#8b5cf6","violet-600":"#7c3aed","violet-700":"#6d28d9","purple-400":"#c084fc","purple-500":"#a855f7","purple-600":"#9333ea","purple-800":"#6b21a8","pink-400":"#f472b6","pink-500":"#ec4899","pink-600":"#db2777","rose-500":"#f43f5e","white":"#ffffff","black":"#000000","transparent":"transparent"};
-  const s = k => sizes[k] || (!isNaN(k) && k !== "" ? parseInt(k)*4+"px" : null);
-  const c = n => colors[n] || null;
-  const sm = {"flex":"display:flex","inline-flex":"display:inline-flex","block":"display:block","inline-block":"display:inline-block","grid":"display:grid","hidden":"display:none","flex-col":"flex-direction:column","flex-row":"flex-direction:row","flex-wrap":"flex-wrap:wrap","flex-1":"flex:1 1 0%","flex-none":"flex:none","flex-shrink-0":"flex-shrink:0","items-start":"align-items:flex-start","items-center":"align-items:center","items-end":"align-items:flex-end","justify-start":"justify-content:flex-start","justify-center":"justify-content:center","justify-end":"justify-content:flex-end","justify-between":"justify-content:space-between","self-center":"align-self:center","grid-cols-1":"grid-template-columns:repeat(1,minmax(0,1fr))","grid-cols-2":"grid-template-columns:repeat(2,minmax(0,1fr))","grid-cols-3":"grid-template-columns:repeat(3,minmax(0,1fr))","grid-cols-4":"grid-template-columns:repeat(4,minmax(0,1fr))","grid-cols-5":"grid-template-columns:repeat(5,minmax(0,1fr))","col-span-2":"grid-column:span 2/span 2","col-span-3":"grid-column:span 3/span 3","col-span-full":"grid-column:1/-1","font-thin":"font-weight:100","font-light":"font-weight:300","font-normal":"font-weight:400","font-medium":"font-weight:500","font-semibold":"font-weight:600","font-bold":"font-weight:700","font-extrabold":"font-weight:800","font-black":"font-weight:900","italic":"font-style:italic","uppercase":"text-transform:uppercase","lowercase":"text-transform:lowercase","capitalize":"text-transform:capitalize","underline":"text-decoration:underline","no-underline":"text-decoration:none","leading-none":"line-height:1","leading-tight":"line-height:1.25","leading-normal":"line-height:1.5","leading-relaxed":"line-height:1.625","leading-loose":"line-height:2","tracking-tight":"letter-spacing:-0.025em","tracking-wide":"letter-spacing:0.025em","tracking-wider":"letter-spacing:0.05em","tracking-widest":"letter-spacing:0.1em","relative":"position:relative","absolute":"position:absolute","fixed":"position:fixed","sticky":"position:sticky","inset-0":"inset:0","top-0":"top:0","bottom-0":"bottom:0","left-0":"left:0","right-0":"right:0","overflow-hidden":"overflow:hidden","overflow-auto":"overflow:auto","z-10":"z-index:10","z-20":"z-index:20","z-50":"z-index:50","shadow":"box-shadow:0 1px 3px 0 rgb(0 0 0/0.1)","shadow-sm":"box-shadow:0 1px 2px 0 rgb(0 0 0/0.05)","shadow-md":"box-shadow:0 4px 6px -1px rgb(0 0 0/0.1)","shadow-lg":"box-shadow:0 10px 15px -3px rgb(0 0 0/0.1)","shadow-xl":"box-shadow:0 20px 25px -5px rgb(0 0 0/0.25)","shadow-none":"box-shadow:none","border":"border-width:1px","border-2":"border-width:2px","border-4":"border-width:4px","border-solid":"border-style:solid","border-dashed":"border-style:dashed","border-t":"border-top-width:1px","border-b":"border-bottom-width:1px","cursor-pointer":"cursor:pointer","pointer-events-none":"pointer-events:none","whitespace-nowrap":"white-space:nowrap","truncate":"overflow:hidden;text-overflow:ellipsis;white-space:nowrap","object-cover":"object-fit:cover","object-contain":"object-fit:contain","opacity-0":"opacity:0","opacity-50":"opacity:0.5","opacity-100":"opacity:1","transition":"transition:all 150ms ease","transition-all":"transition:all 300ms ease","aspect-square":"aspect-ratio:1/1","aspect-video":"aspect-ratio:16/9","mx-auto":"margin-left:auto;margin-right:auto","container":"width:100%;max-width:1280px;margin:0 auto;padding:0 1.5rem","bg-gradient-to-r":"background-image:linear-gradient(to right,var(--tw-gradient-from),var(--tw-gradient-to))","bg-gradient-to-l":"background-image:linear-gradient(to left,var(--tw-gradient-from),var(--tw-gradient-to))","bg-gradient-to-b":"background-image:linear-gradient(to bottom,var(--tw-gradient-from),var(--tw-gradient-to))","bg-gradient-to-br":"background-image:linear-gradient(to bottom right,var(--tw-gradient-from),var(--tw-gradient-to))","bg-gradient-to-tr":"background-image:linear-gradient(to top right,var(--tw-gradient-from),var(--tw-gradient-to))","bg-cover":"background-size:cover","bg-contain":"background-size:contain","bg-center":"background-position:center","bg-no-repeat":"background-repeat:no-repeat","list-none":"list-style-type:none","list-disc":"list-style-type:disc","outline-none":"outline:none","backdrop-blur":"backdrop-filter:blur(8px)","backdrop-blur-md":"backdrop-filter:blur(12px)","blur":"filter:blur(8px)","rounded":"border-radius:4px","rounded-sm":"border-radius:2px","rounded-md":"border-radius:6px","rounded-lg":"border-radius:8px","rounded-xl":"border-radius:12px","rounded-2xl":"border-radius:16px","rounded-3xl":"border-radius:24px","rounded-full":"border-radius:9999px","rounded-none":"border-radius:0","select-none":"user-select:none"};
-  for (const t of tokens) {
-    if (/^(hover|focus|active|group-hover|dark|sm|md|lg|xl|2xl|disabled):/.test(t)) continue;
-    if (sm[t]) { rules.push(sm[t]); continue; }
-    const sp = t.match(/^(p|m|pt|pb|pl|pr|px|py|mt|mb|ml|mr|mx|my|gap|gap-x|gap-y)-(.+)$/);
-    if (sp){const v=s(sp[2]);if(v){const mp={p:"padding",m:"margin",pt:"padding-top",pb:"padding-bottom",pl:"padding-left",pr:"padding-right",px:"padding-inline",py:"padding-block",mt:"margin-top",mb:"margin-bottom",ml:"margin-left",mr:"margin-right",mx:"margin-inline",my:"margin-block",gap:"gap","gap-x":"column-gap","gap-y":"row-gap"};if(mp[sp[1]])rules.push(mp[sp[1]]+":"+v);}continue;}
-    const sz=t.match(/^(w|h|min-w|min-h|max-w|max-h)-(.+)$/);
-    if(sz){const pm={w:"width",h:"height","min-w":"min-width","min-h":"min-height","max-w":"max-width","max-h":"max-height"};const sp2={full:"100%",screen:sz[1].includes("w")?"100vw":"100vh",auto:"auto",fit:"fit-content",none:"none","1/2":"50%","1/3":"33.333%","2/3":"66.666%","1/4":"25%","3/4":"75%",xs:"320px",sm:"384px",md:"448px",lg:"512px",xl:"576px","2xl":"672px","3xl":"768px","4xl":"896px","5xl":"1024px","6xl":"1152px","7xl":"1280px"};const v=sp2[sz[2]]||s(sz[2]);if(v)rules.push(pm[sz[1]]+":"+v);continue;}
-    const bg=t.match(/^bg-(.+)$/);if(bg){const col=c(bg[1]);if(col){rules.push("background-color:"+col);continue;}}
-    const tc=t.match(/^text-(.+)$/);if(tc){const col=c(tc[1]);if(col){rules.push("color:"+col);continue;}const fs={xs:"12px",sm:"14px",base:"16px",lg:"18px",xl:"20px","2xl":"24px","3xl":"30px","4xl":"36px","5xl":"48px","6xl":"60px","7xl":"72px","8xl":"96px"};if(fs[tc[1]]){rules.push("font-size:"+fs[tc[1]]);continue;}const al={center:"center",left:"left",right:"right",justify:"justify"};if(al[tc[1]]){rules.push("text-align:"+al[tc[1]]);continue;}}
-    const brd=t.match(/^border-(.+)$/);if(brd&&c(brd[1])){rules.push("border-color:"+c(brd[1]));continue;}
-    const fr=t.match(/^from-(.+)$/);if(fr&&c(fr[1])){rules.push("--tw-gradient-from:"+c(fr[1]));continue;}
-    const to2=t.match(/^to-(.+)$/);if(to2&&c(to2[1])){rules.push("--tw-gradient-to:"+c(to2[1]));continue;}
+// ── HELPERS ───────────────────────────────────────────────────────────────
+function setUrl(u){ document.getElementById('url-in').value = u; }
+
+function setStatus(msg, type){
+  const el = document.getElementById('status');
+  el.className = 'status ' + type;
+  el.innerHTML = type==='loading'
+    ? `<div class="spinner"></div><span>${msg}</span>`
+    : `<span>${type==='success'?'✅':'❌'}</span><span>${msg}</span>`;
+}
+
+const psIds = ['ps0','ps1','ps2','ps3','ps4','ps5'];
+function setStep(i, msg){
+  document.getElementById('prog').style.display = 'block';
+  document.getElementById('prog-fill').style.width = ((i+1)/psIds.length*100)+'%';
+  psIds.forEach((id,j)=>{
+    document.getElementById(id).className = 'ps' + (j<i?' done':j===i?' active':'');
+  });
+  if(msg) setStatus(msg, 'loading');
+}
+
+// ── FILE UPLOAD ────────────────────────────────────────────────────────────
+function handleFile(e){
+  const f = e.target.files[0]; if(!f) return;
+  uploadedType = f.type||'image/png';
+  const r = new FileReader();
+  r.onload = ev => {
+    uploadedB64 = ev.target.result.split(',')[1];
+    document.getElementById('drop-prompt').style.display = 'none';
+    document.getElementById('img-preview').style.display = 'block';
+    document.getElementById('preview-img').src = ev.target.result;
+  };
+  r.readAsDataURL(f);
+}
+function removeImg(){
+  uploadedB64 = null;
+  document.getElementById('drop-prompt').style.display = 'block';
+  document.getElementById('img-preview').style.display = 'none';
+  document.getElementById('file-in').value = '';
+}
+const dz = document.getElementById('drop-zone');
+dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.classList.add('drag'); });
+dz.addEventListener('dragleave', ()=>dz.classList.remove('drag'));
+dz.addEventListener('drop', e=>{
+  e.preventDefault(); dz.classList.remove('drag');
+  const f = e.dataTransfer.files[0];
+  if(f&&f.type.startsWith('image/')){
+    const dt=new DataTransfer(); dt.items.add(f);
+    document.getElementById('file-in').files=dt.files;
+    handleFile({target:{files:dt.files}});
   }
-  return rules.join("; ");
-}
+});
 
-// ── PARSER ─────────────────────────────────────────────────────────────────
-function uid(){return Math.random().toString(36).substr(2,7);}
-function extractImports(code){const i=[];const re=/import\s+(\w+)\s+from\s+["']([^"']+)["']/g;let m;while((m=re.exec(code))!==null)i.push({name:m[1],from:m[2]});return i;}
-function extractComponents(code){
-  const comps={};
-  const blocks=code.split(/(?=(?:const|function)\s+[A-Z]\w+)/);
-  for(const b of blocks){
-    const nm=b.match(/(?:const|function)\s+([A-Z]\w+)/);if(!nm)continue;
-    const n=nm[1];
-    const rm=b.match(/return\s*\(\s*([\s\S]*?)\s*\)\s*;?\s*(?:}|export)/);if(rm){comps[n]=rm[1].trim();continue;}
-    const am=b.match(/=\s*\(\)\s*=>\s*\(\s*([\s\S]*?)\s*\)\s*;?\s*$/);if(am){comps[n]=am[1].trim();continue;}
-    const jm=b.match(/return\s*\(\s*([\s\S]*?)\s*\)[\s\n]*[;}\n]/);if(jm&&!comps[n])comps[n]=jm[1].trim();
-  }
-  return comps;
-}
-function jsxToSection(jsx,name){
-  const widgets=[];
-  const clean=jsx.replace(/\{\/\*[\s\S]*?\*\/\}/g,"");
-  [...clean.matchAll(/<(h[1-6])[^>]*?(?:className=["'`]([^"'`]*)["'`])?[^>]*>([\s\S]*?)<\/\1>/g)].forEach(([,tag,cls,inner])=>{const text=inner.replace(/<[^>]*>/g,"").replace(/\{[^}]*\}/g,"").trim();if(text&&text.length<300)widgets.push({id:uid(),elType:"widget",widgetType:"heading",settings:{title:text,header_size:tag,align:(cls||"").includes("text-center")?"center":"left",_css_classes:cls||"",custom_css:cls?`.elementor-element-{{ID}}{${tw(cls)}}`:""} });});
-  [...clean.matchAll(/<p[^>]*?(?:className=["'`]([^"'`]*)["'`])?[^>]*>([\s\S]*?)<\/p>/g)].forEach(([,cls,inner])=>{const text=inner.replace(/<[^>]*>/g,"").replace(/\{[^}]*\}/g,"").trim();if(text&&text.length<600)widgets.push({id:uid(),elType:"widget",widgetType:"text-editor",settings:{editor:`<p>${text}</p>`,_css_classes:cls||"",custom_css:cls?`.elementor-element-{{ID}}{${tw(cls)}}`:""} });});
-  [...clean.matchAll(/<(?:button|a|Button)[^>]*?(?:className=["'`]([^"'`]*)["'`])?[^>]*?(?:href=["'`]([^"'`]*)["'`])?[^>]*>([\s\S]*?)<\/(?:button|a|Button)>/g)].forEach(([,cls,href,inner])=>{const text=inner.replace(/<[^>]*>/g,"").replace(/\{[^}]*\}/g,"").trim();if(text&&text.length<80)widgets.push({id:uid(),elType:"widget",widgetType:"button",settings:{text,link:{url:href||"#"},align:"left",_css_classes:cls||"",custom_css:cls?`.elementor-element-{{ID}}{${tw(cls)}}`:""} });});
-  [...clean.matchAll(/<img[^>]*?src=["'`]([^"'`{]*)["'`][^>]*?(?:alt=["'`]([^"'`]*)["'`])?[^>]*\/?>/g)].forEach(([,src,alt])=>{if(src&&!src.startsWith("{"))widgets.push({id:uid(),elType:"widget",widgetType:"image",settings:{image:{url:src,alt:alt||""}}});});
-  [...clean.matchAll(/<(?:ul|ol)[^>]*>([\s\S]*?)<\/(?:ul|ol)>/g)].forEach(([,inner])=>{const items=[...inner.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/g)].map(([,t])=>t.replace(/<[^>]*>/g,"").replace(/\{[^}]*\}/g,"").trim()).filter(Boolean);if(items.length)widgets.push({id:uid(),elType:"widget",widgetType:"icon-list",settings:{icon_list:items.map(text=>({text,selected_icon:{value:"fas fa-check",library:"fa-solid"}}))}});});
-  if(!widgets.length)widgets.push({id:uid(),elType:"widget",widgetType:"html",settings:{html:`<!-- ${name}: paste this component's code for full conversion -->`}});
-  const secCls=(jsx.match(/className=["'`]([^"'`]*)["'`]/)||[])[1]||"";
-  return{id:uid(),elType:"section",title:name,settings:{layout:"boxed",gap:"extended",_css_classes:secCls,custom_css:tw(secCls)?`.elementor-element-{{ID}}{${tw(secCls)}}`:""}, elements:[{id:uid(),elType:"column",settings:{_column_size:100},elements:widgets}]};
-}
-function convertAll(mainCode,compFiles,projName){
-  const imports=extractImports(mainCode);
-  const allComps={};
-  Object.assign(allComps,extractComponents(mainCode));
-  compFiles.forEach(f=>Object.assign(allComps,extractComponents(f)));
-  const local=imports.filter(i=>i.from.startsWith("@/")||i.from.startsWith("./")||i.from.startsWith("../"));
-  const sections=[];
-  for(const imp of local){const jsx=allComps[imp.name];sections.push(jsx?jsxToSection(jsx,imp.name):{id:uid(),elType:"section",title:imp.name,settings:{layout:"boxed",gap:"extended"},elements:[{id:uid(),elType:"column",settings:{_column_size:100},elements:[{id:uid(),elType:"widget",widgetType:"html",settings:{html:`<!-- ${imp.name}: paste this component's code -->`}}]}]});}
-  if(!sections.length){const f=Object.entries(allComps)[0];if(f)sections.push(jsxToSection(f[1],f[0]));}
-  const json={version:"0.4",title:projName||"Converted from Lovable",type:"page",content:sections,page_settings:{template:"elementor_canvas"},_metadata:{converted_at:new Date().toISOString(),source:"Lovable→WP Converter",detected_components:local.map(i=>i.name),section_count:sections.length,total_widgets:sections.reduce((a,s)=>a+(s.elements[0]?.elements?.length||0),0)}};
-  const slug=(projName||"my-project").toLowerCase().replace(/\s+/g,"-").replace(/[^a-z0-9-]/g,"");
-  const fn=slug.replace(/-/g,"_");
-  const styleCss=`/*\nTheme Name: ${projName||"My Project"}\nAuthor: Lovable to WP Converter\nVersion: 1.0.0\nText Domain: ${slug}\n*/\n*,*::before,*::after{box-sizing:border-box}\nhtml{font-size:16px;scroll-behavior:smooth}\nbody{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:#1f2937;background:#fff}\nimg{max-width:100%;height:auto;display:block}\na{color:inherit;text-decoration:none}\nul,ol{margin:0;padding:0;list-style:none}\nh1,h2,h3,h4,h5,h6{margin:0;line-height:1.2}\np{margin:0}\n.site{display:flex;flex-direction:column;min-height:100vh}\n.site-content{flex:1}\n.container{width:100%;max-width:1280px;margin:0 auto;padding:0 1.5rem}\n.elementor-section-boxed>.elementor-container{max-width:1200px}\n`;
-  const functionsPhp=`<?php\nif(!defined('ABSPATH'))exit;\nfunction ${fn}_setup(){\n  add_theme_support('title-tag');\n  add_theme_support('post-thumbnails');\n  add_theme_support('custom-logo',['height'=>60,'width'=>200,'flex-height'=>true,'flex-width'=>true]);\n  register_nav_menus(['primary'=>__('Primary Menu','${slug}')]);\n}\nadd_action('after_setup_theme','${fn}_setup');\nadd_action('elementor/init',function(){add_theme_support('elementor');});\nadd_action('elementor/theme/register_locations',function($m){$m->register_all_core_location();});\nfunction ${fn}_scripts(){\n  wp_enqueue_style('${slug}-fonts','https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',[],null);\n  wp_enqueue_style('${slug}-style',get_stylesheet_uri(),[]);\n}\nadd_action('wp_enqueue_scripts','${fn}_scripts');\nadd_action('wp_enqueue_scripts',function(){wp_dequeue_style('wp-block-library');},100);\nremove_action('wp_head','wp_generator');\n`;
-  const indexPhp=`<?php get_header();?>\n<main id="primary" class="site-main">\n<div class="container">\n<?php if(have_posts()):while(have_posts()):the_post();?>\n<article id="post-<?php the_ID();?>" <?php post_class();?>><div class="entry-content"><?php the_content();?></div></article>\n<?php endwhile;else:?><p><?php esc_html_e('No content found.','${slug}');?></p><?php endif;?>\n</div>\n</main>\n<?php get_footer();?>`;
-  const headerPhp=`<?php\n?><!DOCTYPE html>\n<html <?php language_attributes();?>>\n<head><meta charset="<?php bloginfo('charset');?>"><meta name="viewport" content="width=device-width,initial-scale=1.0"><?php wp_head();?></head>\n<body <?php body_class('elementor-default');?>><?php wp_body_open();?>\n<div id="page" class="site">\n<?php if(!function_exists('elementor_theme_do_location')||!elementor_theme_do_location('header')):?>\n<header style="background:#fff;border-bottom:1px solid #e5e7eb;padding:16px 0;">\n<div class="container" style="display:flex;align-items:center;justify-content:space-between;">\n<?php if(has_custom_logo()):the_custom_logo();else:?><a href="<?php echo esc_url(home_url('/'));?>" style="font-size:1.5rem;font-weight:700;"><?php bloginfo('name');?></a><?php endif;?>\n<nav><?php wp_nav_menu(['theme_location'=>'primary','fallback_cb'=>false]);?></nav>\n</div></header>\n<?php endif;?>\n<div id="content" class="site-content">`;
-  const footerPhp=`</div><!-- #content -->\n<?php if(!function_exists('elementor_theme_do_location')||!elementor_theme_do_location('footer')):?>\n<footer style="background:#111827;color:#9ca3af;padding:32px 0 20px;">\n<div class="container" style="text-align:center;font-size:14px;"><p>&copy; <?php echo date('Y');?> <?php bloginfo('name');?>. All rights reserved.</p></div>\n</footer>\n<?php endif;?>\n</div><!-- #page -->\n<?php wp_footer();?>\n</body></html>`;
-  return{json,styleCss,functionsPhp,indexPhp,headerPhp,footerPhp,slug};
-}
+// ── SCREENSHOT CAPTURE via multiple free APIs ─────────────────────────────
+async function captureScreenshot(url){
+  // Try multiple free screenshot services
+  const services = [
+    // miniature.io — free, no key needed
+    `https://api.miniature.io/?width=1280&height=900&screen=1280&url=${encodeURIComponent(url)}`,
+    // screenshotone (free tier)
+    `https://api.screenshotone.com/take?url=${encodeURIComponent(url)}&viewport_width=1280&viewport_height=900&format=jpg&image_quality=80`,
+    // thum.io — free screenshots
+    `https://image.thum.io/get/width/1280/crop/900/${encodeURIComponent(url)}`,
+  ];
 
-// ── UI ──────────────────────────────────────────────────────────────────────
-function addComp(){
-  const id=compIdCounter++;
-  const list=document.getElementById("comp-list");
-  const div=document.createElement("div");
-  div.className="comp-block";div.dataset.id=id;
-  div.innerHTML=`<div class="comp-header"><span class="comp-name-label">Component ${id}</span><button class="comp-remove" onclick="removeComp(${id})">×</button></div><input class="comp-name-input" placeholder="HeroSection, Navbar…"><textarea class="comp-code-input" rows="7" placeholder="const YourComponent = () => { return ( &lt;section&gt;...&lt;/section&gt; ); }; export default YourComponent;"></textarea>`;
-  list.appendChild(div);
-}
-function removeComp(id){const el=document.querySelector(`.comp-block[data-id="${id}"]`);if(el)el.remove();}
-
-function doConvert(){
-  const mainCode=document.getElementById("main-code").value.trim();
-  const projName=document.getElementById("proj-name").value.trim()||"My Lovable Project";
-  const eb=document.getElementById("error-box");eb.style.display="none";
-  if(!mainCode){eb.textContent="⚠ Paste your main page file (Index.tsx) first.";eb.style.display="block";return;}
-  const btn=document.getElementById("convert-btn");
-  btn.disabled=true;btn.textContent="⏳ Parsing…";
-  setTimeout(()=>{
+  for(const svcUrl of services){
     try{
-      const compFiles=[];
-      document.querySelectorAll(".comp-block").forEach(b=>{const ta=b.querySelector(".comp-code-input");if(ta&&ta.value.trim())compFiles.push(ta.value);});
-      const r=convertAll(mainCode,compFiles,projName);
-      showResult(r);
-    }catch(e){eb.textContent="⚠ Error: "+e.message;eb.style.display="block";}
-    btn.disabled=false;btn.textContent="⚡ Convert to WordPress + Elementor";
-  },500);
+      const res = await fetch(svcUrl, { signal: AbortSignal.timeout(15000) });
+      if(!res.ok) continue;
+      const blob = await res.blob();
+      if(blob.size < 1000) continue; // Too small = error page
+      if(!blob.type.startsWith('image/')) continue;
+      const b64 = await blobToB64(blob);
+      return { b64, type: blob.type||'image/jpeg', svcUrl };
+    }catch(e){ continue; }
+  }
+  return null;
 }
 
-function showResult(r){
-  document.getElementById("empty-state").style.display="none";
-  document.getElementById("result-state").style.display="block";
-  const meta=r.json._metadata;
-  document.getElementById("result-summary").textContent=`✅ ${meta.section_count} sections · ${meta.total_widgets} widgets · ${meta.detected_components.length} components`;
-  document.getElementById("result-comps").textContent=meta.detected_components.slice(0,5).join(", ")+(meta.detected_components.length>5?` +${meta.detected_components.length-5} more`:"");
-  outputTabs=[
-    {key:"json",label:"📦 Elementor JSON",code:JSON.stringify(r.json,null,2),lang:"JSON → import via Elementor > My Templates > Import",filename:"elementor-template.json"},
-    {key:"style",label:"🎨 style.css",code:r.styleCss,lang:"CSS → /themes/your-theme/style.css",filename:"style.css"},
-    {key:"functions",label:"⚙️ functions.php",code:r.functionsPhp,lang:"PHP → /themes/your-theme/functions.php",filename:"functions.php"},
-    {key:"index",label:"📄 index.php",code:r.indexPhp,lang:"PHP → /themes/your-theme/index.php",filename:"index.php"},
-    {key:"header",label:"🔝 header.php",code:r.headerPhp,lang:"PHP → /themes/your-theme/header.php",filename:"header.php"},
-    {key:"footer",label:"🔻 footer.php",code:r.footerPhp,lang:"PHP → /themes/your-theme/footer.php",filename:"footer.php"},
-  ];
-  window._currentSlug = r.slug;
-  renderTabs("json");
+function blobToB64(blob){
+  return new Promise((res,rej)=>{
+    const r = new FileReader();
+    r.onload = e => res(e.target.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(blob);
+  });
 }
 
-function renderTabs(activeKey){
-  activeTabKey=activeKey;
-  const el=document.getElementById("output-tabs");el.innerHTML="";
-  outputTabs.forEach(t=>{const b=document.createElement("button");b.className="tab-btn"+(t.key===activeKey?" active":"");b.textContent=t.label;b.onclick=()=>renderTabs(t.key);el.appendChild(b);});
-  const tab=outputTabs.find(t=>t.key===activeKey);
-  if(tab){document.getElementById("active-lang").textContent=tab.lang;document.getElementById("active-code").textContent=tab.code;document.getElementById("copy-active").className="copy-btn";document.getElementById("copy-active").textContent="COPY";}
+// ── MAIN CONVERT ───────────────────────────────────────────────────────────
+async function startConvert(){
+  const btn = document.getElementById('go-btn');
+  const url = document.getElementById('url-in').value.trim();
+  document.getElementById('out-card').style.display = 'none';
+  document.getElementById('ss-preview').style.display = 'none';
+
+  let imgB64 = uploadedB64;
+  let imgType = uploadedType;
+  let sourceUrl = url;
+
+  if(!imgB64 && !url){
+    setStatus('Please paste a URL or upload a screenshot', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+
+  // ── If URL provided, try to screenshot it ──
+  if(!imgB64 && url){
+    let fullUrl = url.startsWith('http') ? url : 'https://'+url;
+    sourceUrl = fullUrl;
+    setStep(0, `Capturing screenshot of ${fullUrl}…`);
+
+    const shot = await captureScreenshot(fullUrl);
+    if(shot){
+      imgB64 = shot.b64;
+      imgType = shot.type;
+      // Show the screenshot
+      document.getElementById('ss-preview').style.display = 'block';
+      document.getElementById('ss-header').textContent = `📸 Screenshot captured from ${fullUrl} — Claude is now analyzing the design…`;
+      document.getElementById('ss-img').src = `data:${imgType};base64,${imgB64}`;
+    } else {
+      // Screenshot failed — fall back to HTML scraping
+      setStep(0, 'Screenshot service unavailable — fetching page HTML…');
+      imgB64 = null;
+    }
+  }
+
+  setStep(1, 'Claude is analyzing the visual design…');
+
+  // ── Build Claude prompt ──
+  const systemPrompt = `You are an expert web designer who replicates websites as Elementor JSON templates.
+
+Your job: analyze the provided website (screenshot and/or HTML) and produce a COMPLETE, DETAILED Elementor JSON that replicates the exact design with every section fully editable.
+
+STRICT OUTPUT RULES:
+- Output ONLY a valid JSON object. Zero markdown, zero backticks, zero explanation.
+- After the JSON on a new line write exactly: SLUG:the-site-name
+- Use EXACT text from the page (copy it precisely)
+- Use EXACT colors (real hex values from the design, not approximations)
+- Replicate EVERY visible section: navbar, hero, features, about, pricing, testimonials, CTA, footer etc.
+- Make it detailed and complete - not a simplified version
+
+ELEMENTOR JSON STRUCTURE:
+{
+  "version": "0.4",
+  "title": "Site Name",
+  "type": "page",
+  "content": [ ...sections ],
+  "page_settings": { "template": "elementor_canvas" }
 }
 
-function downloadActive(){
-  const tab=outputTabs.find(t=>t.key===activeTabKey);if(!tab)return;
-  const blob=new Blob([tab.code],{type:"text/plain"});
-  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=tab.filename;a.click();URL.revokeObjectURL(a.href);
-  const btn=document.getElementById("dl-active");btn.textContent="✓ SAVED";setTimeout(()=>btn.textContent="⬇ DOWNLOAD",2000);
+SECTION FORMAT:
+{
+  "id": "abc1234",
+  "elType": "section",
+  "title": "Hero",
+  "settings": {
+    "background_background": "classic",
+    "background_color": "#0a0a0a",
+    "padding": {"unit":"px","top":100,"right":80,"bottom":100,"left":80,"isLinked":false},
+    "layout": "boxed",
+    "content_width": {"unit":"px","size":1200},
+    "gap": "extended"
+  },
+  "elements": [{
+    "id": "col1234",
+    "elType": "column",
+    "settings": {"_column_size": 100},
+    "elements": [ ...widgets ]
+  }]
 }
 
-async function downloadAll(){
-  const btn=document.querySelector(".dl-all-btn");btn.textContent="⏳ Zipping…";
-  try{
-    const slug=window._currentSlug||"my-theme";
+FOR GRADIENT BACKGROUNDS:
+"background_background": "gradient",
+"background_color": "#hex1",
+"background_color_b": "#hex2",
+"background_gradient_angle": 135
 
-    // Theme ZIP — files at ROOT level (no subfolder) so WordPress accepts it directly
-    const themeZip=new JSZip();
-    outputTabs.forEach(tab=>{
-      if(tab.key!=="json") themeZip.file(tab.filename, tab.code);
+FOR MULTI-COLUMN LAYOUTS use multiple columns with _column_size adding to 100 (e.g. 50+50 or 33+33+34):
+"elements": [
+  {"id":"col1","elType":"column","settings":{"_column_size":50},"elements":[...]},
+  {"id":"col2","elType":"column","settings":{"_column_size":50},"elements":[...]}
+]
+
+WIDGET TYPES:
+
+heading: {"id":"uid","elType":"widget","widgetType":"heading","settings":{"title":"EXACT TEXT","header_size":"h1","align":"center","title_color":"#ffffff","typography_font_family":"Font Name","typography_font_size":{"unit":"px","size":64},"typography_font_weight":"800","typography_letter_spacing":{"unit":"em","size":-0.03}}}
+
+text-editor: {"id":"uid","elType":"widget","widgetType":"text-editor","settings":{"editor":"<p>EXACT TEXT</p>","text_color":"#hex","typography_font_size":{"unit":"px","size":18},"typography_line_height":{"unit":"em","size":1.7}}}
+
+button: {"id":"uid","elType":"widget","widgetType":"button","settings":{"text":"EXACT LABEL","link":{"url":"#"},"align":"center","background_color":"#hex","button_text_color":"#hex","border_radius":{"unit":"px","top":8,"right":8,"bottom":8,"left":8},"padding":{"unit":"px","top":14,"right":32,"bottom":14,"left":32,"isLinked":false},"typography_font_weight":"600","typography_font_size":{"unit":"px","size":15}}}
+
+image: {"id":"uid","elType":"widget","widgetType":"image","settings":{"image":{"url":"FULL_IMAGE_URL","alt":"description"},"align":"center","width":{"unit":"%","size":100}}}
+
+spacer: {"id":"uid","elType":"widget","widgetType":"spacer","settings":{"space":{"unit":"px","size":40}}}
+
+html: {"id":"uid","elType":"widget","widgetType":"html","settings":{"html":"<div style='...'>COMPLEX HTML</div>"}}
+
+icon-list: {"id":"uid","elType":"widget","widgetType":"icon-list","settings":{"icon_list":[{"id":"uid","text":"Feature text","selected_icon":{"value":"fas fa-check","library":"fa-solid"}}],"icon_color":"#hex","text_color":"#hex","space_between":{"unit":"px","size":12}}}
+
+divider: {"id":"uid","elType":"widget","widgetType":"divider","settings":{"color":"#hex","gap":{"unit":"px","size":30}}}
+
+IMPORTANT DETAILS:
+- Generate unique 7-char alphanumeric IDs for every "id" field
+- For navbar/header: use HTML widget with full nav HTML including logo, links, CTA button
+- For cards/grids: use multi-column sections
+- For icons: use HTML widget with inline SVG or emoji
+- Replicate the EXACT color palette (background colors, text colors, button colors, borders)
+- Replicate font sizes accurately (hero h1 might be 72px, subtext 20px etc)
+- Include ALL sections you can see - be thorough`;
+
+  const userParts = [];
+
+  if(imgB64){
+    userParts.push({
+      type: 'image',
+      source: { type: 'base64', media_type: imgType||'image/jpeg', data: imgB64 }
     });
-    const themeBlob=await themeZip.generateAsync({type:"blob"});
+  }
 
-    // Main package ZIP — contains ready-to-use theme zip + elementor json + readme
+  // Also try to fetch page HTML for text content
+  let pageHtml = '';
+  if(sourceUrl){
+    try{
+      const proxies = [
+        `https://api.allorigins.win/get?url=${encodeURIComponent(sourceUrl)}`,
+        `https://corsproxy.io/?${encodeURIComponent(sourceUrl)}`,
+      ];
+      for(const p of proxies){
+        try{
+          const r = await fetch(p,{signal:AbortSignal.timeout(8000)});
+          if(!r.ok) continue;
+          const d = await r.json().catch(()=>null);
+          if(d?.contents){ pageHtml = d.contents; break; }
+        }catch(e){ continue; }
+      }
+    }catch(e){}
+  }
+
+  let textPrompt = imgB64
+    ? `Analyze this screenshot of ${sourceUrl||'the website'} and generate complete Elementor JSON replicating the EXACT design — every section, exact text, exact colors, exact layout.`
+    : `Analyze this website and generate complete Elementor JSON replicating the exact design.\nURL: ${sourceUrl}`;
+
+  if(pageHtml){
+    const clean = pageHtml
+      .replace(/<script[\s\S]*?<\/script>/gi,'')
+      .replace(/<style[\s\S]*?<\/style>/gi,'')
+      .replace(/<!--[\s\S]*?-->/g,'')
+      .replace(/<[^>]+>/g,' ')
+      .replace(/\s+/g,' ')
+      .trim()
+      .substring(0, 8000);
+    textPrompt += `\n\nPAGE TEXT CONTENT (use this for exact wording):\n${clean}`;
+  }
+
+  textPrompt += '\n\nOutput ONLY the JSON. Be thorough and replicate every visible section.';
+  userParts.push({ type: 'text', text: textPrompt });
+
+  setStep(2, 'Claude is building sections and extracting content…');
+
+  try{
+    const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 8000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userParts }]
+      })
+    });
+
+    if(!apiRes.ok){
+      const err = await apiRes.json().catch(()=>({error:{message:'API error'}}));
+      throw new Error(err?.error?.message || `HTTP ${apiRes.status}`);
+    }
+
+    setStep(3, 'Extracting colors, fonts, layout…');
+    const apiData = await apiRes.json();
+    const rawText = apiData.content?.map(b=>b.type==='text'?b.text:'').join('')||'';
+
+    setStep(4, 'Parsing Elementor JSON…');
+
+    // Extract slug
+    const slugM = rawText.match(/SLUG:([a-z0-9-]+)/i);
+    if(slugM) slug = slugM[1];
+    else if(sourceUrl){
+      try{ slug = new URL(sourceUrl.startsWith('http')?sourceUrl:'https://'+sourceUrl).hostname.replace('www.','').replace(/\./g,'-').replace(/[^a-z0-9-]/g,''); }catch(e){}
+    }
+
+    // Extract JSON
+    let jsonStr = rawText.replace(/SLUG:[^\s\n]+/,'').trim();
+    // Find the JSON object
+    const start = jsonStr.indexOf('{');
+    const end = jsonStr.lastIndexOf('}');
+    if(start !== -1 && end !== -1) jsonStr = jsonStr.substring(start, end+1);
+
+    let json;
+    try{
+      json = JSON.parse(jsonStr);
+    }catch(e){
+      // Fix common issues
+      jsonStr = jsonStr
+        .replace(/,(\s*[}\]])/g,'$1')  // trailing commas
+        .replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g,'"$2":') // unquoted keys
+        .replace(/:\s*'([^']*)'/g,':"$1"'); // single quotes to double
+      json = JSON.parse(jsonStr);
+    }
+
+    setStep(5, 'Generating WordPress theme files…');
+    const wp = genWP(json.title||'My Site', slug);
+
+    const secCount = json.content?.length||0;
+    const widCount = json.content?.reduce((a,s)=>a+(s.elements?.[0]?.elements?.length||0),0)||0;
+
+    outTabs = [
+      {key:'json', label:'📦 Elementor JSON', code:JSON.stringify(json,null,2), lang:'→ Elementor > My Templates > Import Template', file:'elementor-template.json'},
+      {key:'style', label:'🎨 style.css', code:wp.style, lang:'→ WordPress theme root folder', file:'style.css'},
+      {key:'functions', label:'⚙️ functions.php', code:wp.functions, lang:'→ WordPress theme root folder', file:'functions.php'},
+      {key:'index', label:'📄 index.php', code:wp.index, lang:'→ WordPress theme root folder', file:'index.php'},
+      {key:'header', label:'🔝 header.php', code:wp.header, lang:'→ WordPress theme root folder', file:'header.php'},
+      {key:'footer', label:'🔻 footer.php', code:wp.footer, lang:'→ WordPress theme root folder', file:'footer.php'},
+    ];
+
+    // Show output
+    document.getElementById('out-card').style.display = 'block';
+    document.getElementById('out-title').textContent = `✅ ${json.title||'Page'} — Elementor Template Ready`;
+    document.getElementById('out-chips').innerHTML =
+      `<span class="chip g">${secCount} sections</span>` +
+      `<span class="chip g">${widCount} widgets</span>` +
+      (slug?`<span class="chip">${slug}</span>`:'');
+
+    renderTabs('json');
+    setStatus(`Done! ${secCount} sections · ${widCount} editable widgets — ready to import into Elementor`, 'success');
+    document.getElementById('out-card').scrollIntoView({behavior:'smooth', block:'start'});
+
+  }catch(e){
+    console.error(e);
+    setStatus('Error: ' + e.message, 'error');
+    document.getElementById('prog').style.display = 'none';
+  }
+
+  btn.disabled = false;
+}
+
+// ── WP THEME GENERATOR ─────────────────────────────────────────────────────
+function genWP(name, sl){
+  const fn = (sl||'my_site').replace(/-/g,'_');
+  const style = `/*\nTheme Name: ${name}\nAuthor: URL to Elementor AI Converter\nVersion: 1.0.0\nText Domain: ${sl}\n*/\n*,*::before,*::after{box-sizing:border-box}\nhtml{font-size:16px;scroll-behavior:smooth}\nbody{margin:0;padding:0;font-family:system-ui,-apple-system,sans-serif;line-height:1.6;color:#111827;background:#fff}\nimg{max-width:100%;height:auto;display:block}\na{color:inherit;text-decoration:none}\nul,ol{margin:0;padding:0;list-style:none}\nh1,h2,h3,h4,h5,h6{margin:0;line-height:1.2}\np{margin:0}\n.site{display:flex;flex-direction:column;min-height:100vh}\n.site-content{flex:1}\n.container{width:100%;max-width:1280px;margin:0 auto;padding:0 1.5rem}\n.elementor-section-boxed>.elementor-container{max-width:1200px}\n`;
+  const functions = `<?php\nif(!defined('ABSPATH'))exit;\nfunction ${fn}_setup(){\n  add_theme_support('title-tag');\n  add_theme_support('post-thumbnails');\n  add_theme_support('custom-logo');\n  register_nav_menus(['primary'=>__('Primary','${sl}')]);\n}\nadd_action('after_setup_theme','${fn}_setup');\nadd_action('elementor/init',function(){add_theme_support('elementor');});\nadd_action('elementor/theme/register_locations',function($m){$m->register_all_core_location();});\nfunction ${fn}_scripts(){\n  wp_enqueue_style('${sl}-style',get_stylesheet_uri(),[]);\n}\nadd_action('wp_enqueue_scripts','${fn}_scripts');\nadd_action('wp_enqueue_scripts',function(){wp_dequeue_style('wp-block-library');},100);\nremove_action('wp_head','wp_generator');\n`;
+  const index = `<?php get_header();?>\n<main id="primary"><div class="container"><?php if(have_posts()):while(have_posts()):the_post();?><article <?php post_class();?>><div class="entry-content"><?php the_content();?></div></article><?php endwhile;endif;?></div></main>\n<?php get_footer();?>`;
+  const header = `<?php\n?><!DOCTYPE html>\n<html <?php language_attributes();?>>\n<head><meta charset="<?php bloginfo('charset');?>"><meta name="viewport" content="width=device-width,initial-scale=1.0"><?php wp_head();?></head>\n<body <?php body_class('elementor-default');?>><?php wp_body_open();?>\n<div id="page">\n<?php if(!function_exists('elementor_theme_do_location')||!elementor_theme_do_location('header')):?>\n<header style="background:#fff;border-bottom:1px solid #e5e7eb;padding:16px 0;">\n<div class="container" style="display:flex;align-items:center;justify-content:space-between;">\n<?php if(has_custom_logo()):the_custom_logo();else:?><a href="<?php echo esc_url(home_url('/'));?>" style="font-size:1.5rem;font-weight:700;"><?php bloginfo('name');?></a><?php endif;?>\n<nav><?php wp_nav_menu(['theme_location'=>'primary','fallback_cb'=>false]);?></nav>\n</div></header>\n<?php endif;?>\n<div id="content">`;
+  const footer = `</div>\n<?php if(!function_exists('elementor_theme_do_location')||!elementor_theme_do_location('footer')):?>\n<footer style="background:#111827;color:#9ca3af;padding:32px 0;text-align:center;"><p style="font-size:14px;">&copy; <?php echo date('Y');?> <?php bloginfo('name');?>. All rights reserved.</p></footer>\n<?php endif;?>\n</div>\n<?php wp_footer();?>\n</body></html>`;
+  return {style, functions, index, header, footer};
+}
+
+// ── UI HELPERS ─────────────────────────────────────────────────────────────
+function renderTabs(k){
+  activeKey=k;
+  const el=document.getElementById('out-tabs'); el.innerHTML='';
+  outTabs.forEach(t=>{
+    const b=document.createElement('button');
+    b.className='tab'+(t.key===k?' active':'');
+    b.textContent=t.label; b.onclick=()=>renderTabs(t.key);
+    el.appendChild(b);
+  });
+  const t=outTabs.find(t=>t.key===k);
+  if(t){
+    document.getElementById('active-lang').textContent=t.lang;
+    document.getElementById('active-code').textContent=t.code;
+    document.getElementById('cp-btn').className='btn-cp';
+    document.getElementById('cp-btn').textContent='COPY';
+  }
+}
+function cpActive(){
+  const t=outTabs.find(t=>t.key===activeKey); if(!t)return;
+  navigator.clipboard.writeText(t.code);
+  const b=document.getElementById('cp-btn'); b.textContent='✓ COPIED'; b.className='btn-cp ok';
+  setTimeout(()=>{ b.textContent='COPY'; b.className='btn-cp'; },2000);
+}
+function dlActive(){
+  const t=outTabs.find(t=>t.key===activeKey); if(!t)return;
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([t.code],{type:'text/plain'}));
+  a.download=t.file; a.click(); URL.revokeObjectURL(a.href);
+}
+async function dlAll(){
+  const btn=document.querySelector('.dl-all'); btn.textContent='⏳ Zipping…';
+  try{
+    const sl=slug||'my-site';
+    const themeZip=new JSZip();
+    outTabs.forEach(t=>{ if(t.key!=='json') themeZip.file(t.file,t.code); });
+    const themeBlob=await themeZip.generateAsync({type:'blob'});
     const mainZip=new JSZip();
-    mainZip.file(slug+"-theme.zip", themeBlob);
-    const jsonTab=outputTabs.find(t=>t.key==="json");
-    if(jsonTab) mainZip.file("elementor-template.json", jsonTab.code);
-    mainZip.file("HOW-TO-INSTALL.txt",
-"LOVABLE TO WORDPRESS PACKAGE\n" +
-"=============================\n\n" +
-"YOUR FILES:\n" +
-"  "+slug+"-theme.zip         Upload this to WordPress as a theme\n" +
-"  elementor-template.json    Import this into Elementor\n\n" +
-"STEP 1 - UPLOAD THEME\n" +
-"  WP Admin > Appearance > Themes > Add New > Upload Theme\n" +
-"  Select '"+slug+"-theme.zip' > Install Now > Activate\n\n" +
-"STEP 2 - INSTALL ELEMENTOR\n" +
-"  WP Admin > Plugins > Add New > search Elementor > Install & Activate\n\n" +
-"STEP 3 - IMPORT TEMPLATE\n" +
-"  WP Admin > Elementor > My Templates > Import Templates\n" +
-"  Upload 'elementor-template.json'\n\n" +
-"STEP 4 - ADD TO PAGE\n" +
-"  Pages > Add New > Edit with Elementor\n" +
-"  Click folder icon > My Templates > hover template > Insert\n" +
-"  Set Template = Elementor Canvas > Publish\n"
+    mainZip.file(sl+'-theme.zip', themeBlob);
+    const jt=outTabs.find(t=>t.key==='json');
+    if(jt) mainZip.file('elementor-template.json',jt.code);
+    mainZip.file('HOW-TO-INSTALL.txt',
+      'STEP 1: Appearance > Themes > Add New > Upload > '+sl+'-theme.zip > Activate\n'+
+      'STEP 2: Plugins > Elementor > Install & Activate\n'+
+      'STEP 3: Elementor > My Templates > Import > elementor-template.json\n'+
+      'STEP 4: Pages > Edit with Elementor > Add Template > Insert > Publish\n'
     );
-    const mainBlob=await mainZip.generateAsync({type:"blob"});
-    const a=document.createElement("a");
-    a.href=URL.createObjectURL(mainBlob);
-    a.download=slug+"-wordpress-package.zip";
-    a.click();
-    URL.revokeObjectURL(a.href);
-    btn.textContent="✅ Downloaded!";
-    setTimeout(()=>btn.textContent="📦 Download All Files as ZIP",2500);
-  }catch(e){btn.textContent="📦 Download All Files as ZIP";alert("ZIP error: "+e.message);}
+    const blob=await mainZip.generateAsync({type:'blob'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download=sl+'-wordpress-package.zip'; a.click(); URL.revokeObjectURL(a.href);
+    btn.textContent='✅ Downloaded!';
+    setTimeout(()=>btn.textContent='📦 Download Complete WordPress Package (ZIP)',2500);
+  }catch(e){ btn.textContent='📦 Download Complete WordPress Package (ZIP)'; alert('Error: '+e.message); }
 }
 
-function copyActive(){
-  const tab=outputTabs.find(t=>t.key===activeTabKey);if(!tab)return;
-  navigator.clipboard.writeText(tab.code);
-  const btn=document.getElementById("copy-active");btn.textContent="✓ COPIED";btn.className="copy-btn copied";
-  setTimeout(()=>{btn.textContent="COPY";btn.className="copy-btn";},2000);
-}
-
-function loadExample(){
-  document.getElementById("main-code").value=`import Navbar from "@/components/Navbar";\nimport HeroSection from "@/components/HeroSection";\nimport FeaturesSection from "@/components/FeaturesSection";\nimport Footer from "@/components/Footer";\n\nconst Index = () => {\n  return (\n    <div className="min-h-screen bg-white">\n      <Navbar />\n      <main>\n        <HeroSection />\n        <FeaturesSection />\n      </main>\n      <Footer />\n    </div>\n  );\n};\nexport default Index;`;
-  document.getElementById("proj-name").value="LearnHub Academy";
-  const list=document.getElementById("comp-list");list.innerHTML="";
-  const comps=[
-    {id:1,name:"HeroSection",code:`const HeroSection = () => {\n  return (\n    <section className="relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 to-indigo-900 px-6 py-24">\n      <div className="container mx-auto text-center">\n        <h1 className="text-5xl font-extrabold text-white leading-tight mb-6">Learn Without Limits</h1>\n        <p className="text-xl text-slate-300 max-w-2xl mx-auto mb-10">Access world-class courses taught by industry experts.</p>\n        <a href="#courses" className="px-8 py-4 bg-indigo-600 text-white rounded-full font-semibold">Explore Courses</a>\n      </div>\n    </section>\n  );\n};\nexport default HeroSection;`},
-    {id:2,name:"FeaturesSection",code:`const FeaturesSection = () => {\n  return (\n    <section className="py-24 bg-white">\n      <div className="container mx-auto px-6">\n        <h2 className="text-3xl font-bold text-gray-900 text-center mb-4">Why Choose Us</h2>\n        <p className="text-lg text-gray-600 text-center mb-16 max-w-2xl mx-auto">Everything you need to succeed.</p>\n      </div>\n    </section>\n  );\n};\nexport default FeaturesSection;`},
-  ];
-  comps.forEach(({id,name,code})=>{const div=document.createElement("div");div.className="comp-block";div.dataset.id=id;div.innerHTML=`<div class="comp-header"><span class="comp-name-label">Component ${id}</span><button class="comp-remove" onclick="removeComp(${id})">×</button></div><input class="comp-name-input" value="${name}" placeholder="Component name"><textarea class="comp-code-input" rows="7">${code.replace(/</g,"&lt;").replace(/>/g,"&gt;")}</textarea>`;list.appendChild(div);});
-  compIdCounter=3;
-}
+document.getElementById('url-in').addEventListener('keydown', e=>{ if(e.key==='Enter') startConvert(); });
 </script>
 </body>
 </html>
