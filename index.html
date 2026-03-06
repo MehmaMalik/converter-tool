@@ -362,14 +362,47 @@ function downloadActive(){
 async function downloadAll(){
   const btn=document.querySelector(".dl-all-btn");btn.textContent="⏳ Zipping…";
   try{
-    const zip=new JSZip();
     const slug=window._currentSlug||"my-theme";
-    const folder=zip.folder(slug);
-    outputTabs.forEach(tab=>{if(tab.key==="json")zip.file("elementor-template.json",tab.code);else folder.file(tab.filename,tab.code);});
-    zip.file("README.txt",`LOVABLE → WORDPRESS + ELEMENTOR\n================================\n\nelementor-template.json  →  Elementor > My Templates > Import\n${slug}/style.css         →  WordPress theme root\n${slug}/functions.php     →  WordPress theme root\n${slug}/index.php         →  WordPress theme root\n${slug}/header.php        →  WordPress theme root\n${slug}/footer.php        →  WordPress theme root\n\nSTEPS:\n1. Zip the "${slug}" folder → WP Admin > Appearance > Themes > Upload > Activate\n2. Plugins > Add New > Elementor > Install & Activate\n3. Elementor > My Templates > Import Template > upload elementor-template.json\n4. Pages > Add New > Edit with Elementor > Add Template > Insert\n5. Set Template = Elementor Canvas > Publish\n`);
-    const blob=await zip.generateAsync({type:"blob"});
-    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`${slug}-wordpress-elementor.zip`;a.click();URL.revokeObjectURL(a.href);
-    btn.textContent="✅ Downloaded!";setTimeout(()=>btn.textContent="📦 Download All Files as ZIP",2500);
+
+    // Theme ZIP — files at ROOT level (no subfolder) so WordPress accepts it directly
+    const themeZip=new JSZip();
+    outputTabs.forEach(tab=>{
+      if(tab.key!=="json") themeZip.file(tab.filename, tab.code);
+    });
+    const themeBlob=await themeZip.generateAsync({type:"blob"});
+
+    // Main package ZIP — contains ready-to-use theme zip + elementor json + readme
+    const mainZip=new JSZip();
+    mainZip.file(slug+"-theme.zip", themeBlob);
+    const jsonTab=outputTabs.find(t=>t.key==="json");
+    if(jsonTab) mainZip.file("elementor-template.json", jsonTab.code);
+    mainZip.file("HOW-TO-INSTALL.txt",
+"LOVABLE TO WORDPRESS PACKAGE\n" +
+"=============================\n\n" +
+"YOUR FILES:\n" +
+"  "+slug+"-theme.zip         Upload this to WordPress as a theme\n" +
+"  elementor-template.json    Import this into Elementor\n\n" +
+"STEP 1 - UPLOAD THEME\n" +
+"  WP Admin > Appearance > Themes > Add New > Upload Theme\n" +
+"  Select '"+slug+"-theme.zip' > Install Now > Activate\n\n" +
+"STEP 2 - INSTALL ELEMENTOR\n" +
+"  WP Admin > Plugins > Add New > search Elementor > Install & Activate\n\n" +
+"STEP 3 - IMPORT TEMPLATE\n" +
+"  WP Admin > Elementor > My Templates > Import Templates\n" +
+"  Upload 'elementor-template.json'\n\n" +
+"STEP 4 - ADD TO PAGE\n" +
+"  Pages > Add New > Edit with Elementor\n" +
+"  Click folder icon > My Templates > hover template > Insert\n" +
+"  Set Template = Elementor Canvas > Publish\n"
+    );
+    const mainBlob=await mainZip.generateAsync({type:"blob"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(mainBlob);
+    a.download=slug+"-wordpress-package.zip";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    btn.textContent="✅ Downloaded!";
+    setTimeout(()=>btn.textContent="📦 Download All Files as ZIP",2500);
   }catch(e){btn.textContent="📦 Download All Files as ZIP";alert("ZIP error: "+e.message);}
 }
 
